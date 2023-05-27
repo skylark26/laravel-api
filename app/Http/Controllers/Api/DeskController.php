@@ -7,6 +7,7 @@ use App\Http\Requests\DeskStoreRequest;
 use App\Http\Resources\DeskResource;
 use App\Models\Desk;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class DeskController extends Controller
 {
@@ -31,24 +32,28 @@ class DeskController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Desk $desk)
     {
-        return new DeskResource(Desk::findOrFail($id));
+        return new DeskResource($desk);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(DeskStoreRequest $request, Desk $desk)
     {
-        //
+        $desk->update($request->validated());
+
+        return $desk;
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Desk $desk)
     {
-        //
+        $desk->delete();
+
+        return response(null, Response::HTTP_NO_CONTENT);
     }
 }
